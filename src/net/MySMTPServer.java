@@ -1,8 +1,4 @@
-package ca.yorku.eecs3214.mail.net;
-
-import ca.yorku.eecs3214.mail.mailbox.MailWriter;
-import ca.yorku.eecs3214.mail.mailbox.Mailbox;
-
+package net;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -10,6 +6,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+
+import mailbox.MailWriter;
+import mailbox.Mailbox;
 
 public class MySMTPServer extends Thread {
 

@@ -1,9 +1,4 @@
-package ca.yorku.eecs3214.mail.net;
-
-import ca.yorku.eecs3214.mail.mailbox.MailMessage;
-import ca.yorku.eecs3214.mail.mailbox.Mailbox;
-import ca.yorku.eecs3214.mail.mailbox.Mailbox.MailboxNotAuthenticatedException;
-
+package net;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -15,13 +10,16 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import mailbox.MailMessage;
+import mailbox.Mailbox;
+import mailbox.Mailbox.MailboxNotAuthenticatedException;
+
 public class MyPOPServer extends Thread {
 
     private final Socket socket;
     private final BufferedReader socketIn;
     private final PrintWriter socketOut;
 
-    // TODO Additional properties, if needed
     String user;
     Mailbox mb;
     List<Integer> msgIndex = new ArrayList<Integer>();
@@ -52,7 +50,7 @@ public class MyPOPServer extends Thread {
             socketOut.write("+OK POP3 server ready <" + socket.getLocalAddress() + ">\r\n");
             socketOut.flush();
 
-            int state = 0; // 0 = User auth state, 1 = transaction state.
+            int state = 0;
             boolean auth = false;
 
             while(true) {
@@ -125,7 +123,7 @@ public class MyPOPServer extends Thread {
                                 socketOut.flush();
                                 break;
                             }
-                            if(cmd.length > 1) { // Has argument.
+                            if(cmd.length > 1) {
                                 if(Integer.parseInt(cmd[1]) < 1 || Integer.parseInt(cmd[1]) > mb.size(true) || mb.getMailMessage(Integer.parseInt(cmd[1])).isDeleted()) {
                                     socketOut.write("-ERR No such message\r\n");
                                     socketOut.flush();
@@ -224,7 +222,6 @@ public class MyPOPServer extends Thread {
                                 else {
                                     mb.getMailMessage(Integer.parseInt(cmd[1])).tagForDeletion();
                                     deletedmsg.add(msgIndex.remove(msgIndex.indexOf(Integer.parseInt(cmd[1]))));
-                                    //msgIndex.remove(msgIndex.indexOf(Integer.parseInt(cmd[1])));
                                     socketOut.write("+OK Deleted\r\n");
                                     socketOut.flush();
                                     break;
